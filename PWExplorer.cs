@@ -16,6 +16,8 @@ using System.Xml.Linq;
 using Bentley.Connect.Client.API.V1;
 using Bentley.Connect.Client.API.V1.Interface;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
+using System.Configuration;
+
 
 namespace ProjectWiseApp
 {
@@ -24,8 +26,42 @@ namespace ProjectWiseApp
         public PWExplorer()
         {
             InitializeComponent();
+            //Set up Default PW setting
 
-            
+            // Load or set default settings from StoreSettings
+            if (string.IsNullOrEmpty(Properties.StoreSettings.Default.Server) ||
+                string.IsNullOrEmpty(Properties.StoreSettings.Default.Datasource))
+            {
+                try
+                {
+                    // Get the path to secrets.config.xml relative to the executing assembly
+                    string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "secrets.config.xml");
+                    if (File.Exists(configPath))
+                    {
+                        ExeConfigurationFileMap fileMap = new ExeConfigurationFileMap { ExeConfigFilename = configPath };
+                        Configuration config = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
+                        if (config.AppSettings.Settings["Server"] != null)
+                        {
+                            Properties.StoreSettings.Default.Server = config.AppSettings.Settings["Server"].Value;
+                        }
+                        if (config.AppSettings.Settings["Datasource"] != null)
+                        {
+                            Properties.StoreSettings.Default.Datasource = config.AppSettings.Settings["Datasource"].Value;
+                        }
+                        Properties.StoreSettings.Default.Save();
+                    }
+                    else
+                    {
+                        MessageBox.Show("secrets.config.xml not found in the output directory. Using default settings.");
+                    }
+                }
+                catch (ConfigurationErrorsException ex)
+                {
+                    MessageBox.Show($"Error loading secrets.config.xml: {ex.Message}. Using default settings.");
+                }
+            }
+
+
             //Add plus sign event to the treeview
             treeViewPW.BeforeExpand += treeViewPW_BeforeExpand;
             this.Controls.Add(treeViewPW);
@@ -46,10 +82,11 @@ namespace ProjectWiseApp
    
         private void LoginBt_Click(object sender, EventArgs e)
         {
+            
             LoginBt.Text = "Logging in...";
             LoginBt.Enabled = false;
-            string server = Properties.Settings.Default.Server;
-            string datasource = Properties.Settings.Default.Datasource;
+            string server = Properties.StoreSettings.Default.Server;
+            string datasource = Properties.StoreSettings.Default.Datasource;
             string DataName = server+":"+datasource;
             PWAPI.Initialize();
             string user = PWAPI.GetCurrentUsername();

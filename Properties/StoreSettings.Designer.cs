@@ -13,11 +13,11 @@ namespace ProjectWiseApp.Properties {
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.13.0.0")]
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+    internal sealed partial class StoreSettings : global::System.Configuration.ApplicationSettingsBase {
         
-        private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
+        private static StoreSettings defaultInstance = ((StoreSettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new StoreSettings())));
         
-        public static Settings Default {
+        public static StoreSettings Default {
             get {
                 return defaultInstance;
             }
@@ -25,7 +25,7 @@ namespace ProjectWiseApp.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("aecom-na-pw.bentley.com")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string Server {
             get {
                 return ((string)(this["Server"]));
@@ -37,7 +37,7 @@ namespace ProjectWiseApp.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("AECOM_USA_New_York")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string Datasource {
             get {
                 return ((string)(this["Datasource"]));
